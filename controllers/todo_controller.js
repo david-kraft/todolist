@@ -1,11 +1,10 @@
 const express = require("express");
 const todo = require("../models/todo");
-const app = express();
+const router = express.Router();
 
-const router = app.Router();
-
+// Get client URL if root
 router.get("/", function (req, res) {
-    cat.all(function (data) {
+    todo.selectAll(function (data) {
         const hbsObject = {
             todo: data
         };

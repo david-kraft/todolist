@@ -1,5 +1,5 @@
 // Import mysql connection.
-const connection = require("../config/connection");
+const connection = require("../config/connection.js");
 
 // Helper function for SQL syntax.
 // Let's say we want to pass 3 values into the mySQL query.
@@ -16,6 +16,7 @@ function printQuestionMarks(num) {
     return arr.toString();
 }
 
+
 // Helper function to convert object key/value pairs to SQL syntax
 function objToSql(ob) {
     let arr = [];
@@ -29,64 +30,64 @@ function objToSql(ob) {
             if (typeof value === "string" && value.indexOf(" ") >= 0) {
                 value = "'" + value + "'";
             }
-            // e.g. {name: 'Lana Del Grey'} => ["name='Lana Del Grey'"]
-            // e.g. {sleepy: true} => ["sleepy=true"]
+            // e.g. {text: 'Lana Del Grey'} => ["name='Lana Del Grey'"]
+            // e.g. {complete: true} => ["complete=true"]
             arr.push(key + "=" + value);
         }
     }
 
     // translate array of strings to a single comma-separated string
     return arr.toString();
+}
 
-    // Object for all our SQL statement functions.
-    let orm = {
-        selectAll: function (tableInput, cb) {
-            var queryString = "SELECT * FROM " + tableInput + ";";
-            connection.query(queryString, function (err, result) {
-                if (err) {
-                    throw err;
-                }
-                cb(result);
-            });
-        },
-        insertOne: function (table, cols, vals, cb) {
-            let queryString = "INSERT INTO " + table;
+// Object for all our SQL statement functions.
+const orm = {
+    selectAll: function (tableInput, cb) {
+        var queryString = "SELECT * FROM " + tableInput + ";";
+        connection.query(queryString, function (err, result) {
+            if (err) {
+                throw err;
+            }
+            cb(result);
+        });
+    },
+    insertOne: function (table, cols, vals, cb) {
+        let queryString = "INSERT INTO " + table;
 
-            queryString += " (";
-            queryString += cols.toString();
-            queryString += ") ";
-            queryString += "VALUES (";
-            queryString += printQuestionMarks(vals.length);
-            queryString += ") ";
+        queryString += " (";
+        queryString += cols.toString();
+        queryString += ") ";
+        queryString += "VALUES (";
+        queryString += printQuestionMarks(vals.length);
+        queryString += ") ";
 
-            console.log(queryString);
+        console.log(queryString);
 
-            connection.query(queryString, vals, function (err, result) {
-                if (err) {
-                    throw err;
-                }
-                cb(result);
-            });
-        },
-        // An example of objColVals would be {name: Empty garbage, complete: true}
-        updateOne: function (table, objColVals, condition, cb) {
-            let queryString = "UPDATE " + table;
+        connection.query(queryString, vals, function (err, result) {
+            if (err) {
+                throw err;
+            }
+            cb(result);
+        });
+    },
+    // An example of objColVals would be {name: Empty garbage, complete: true}
+    updateOne: function (table, objColVals, condition, cb) {
+        let queryString = "UPDATE " + table;
 
-            queryString += " SET ";
-            queryString += objToSql(objColVals);
-            queryString += " WHERE ";
-            queryString += condition;
+        queryString += " SET ";
+        queryString += objToSql(objColVals);
+        queryString += " WHERE ";
+        queryString += condition;
 
-            console.log(queryString);
-            connection.query(queryString, function (err, result) {
-                if (err) {
-                    throw err;
-                }
+        console.log(queryString);
+        connection.query(queryString, function (err, result) {
+            if (err) {
+                throw err;
+            }
 
-                cb(result);
-            });
-        },
-    };
+            cb(result);
+        });
+    },
 };
 
 // Export the ORM object for the model (todo.js).
