@@ -1,0 +1,10 @@
+<li>
+	{{name}}
+
+	<button class="change-complete" data-id="{{id}}" data-complete="{{complete}}">
+		{{#if complete}}Still more work to do!{{else}}I'm done!{{/if}}
+	</button>
+
+	<button class="delete-todo" data-id="{{this.id}}">DELETE!</button>
+
+</li>
