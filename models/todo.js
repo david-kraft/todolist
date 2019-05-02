@@ -2,19 +2,24 @@
 const orm = require("../config/orm.js");
 
 const todo = {
-    selectAll: function (cb) {
-        orm.selectAll("todo", function (res) {
+    all: function (cb) {
+        orm.all("todo", function (res) {
             cb(res);
         });
     },
     // The variables cols and vals are arrays.
-    createOne: function (cols, vals, cb) {
-        orm.createOne("todo", cols, vals, function (res) {
+    create: function (cols, vals, cb) {
+        orm.create("todo", cols, vals, function (res) {
             cb(res);
         });
     },
-    updateOne: function (objColVals, condition, cb) {
-        orm.updateOne("todo", objColVals, condition, function (res) {
+    update: function (objColVals, condition, cb) {
+        orm.update("todo", objColVals, condition, function (res) {
+            cb(res);
+        });
+    },
+    delete: function (condition, cb) {
+        orm.delete("cats", condition, function (res) {
             cb(res);
         });
     }
